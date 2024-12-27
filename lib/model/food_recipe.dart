@@ -110,7 +110,7 @@ var FoodRecipes = [
   ),
   FoodRecipe(
     name: 'Mochi Matcha',
-    imageAsset: 'assets/images/Mochi_matcha.jpg',
+    imageAsset: 'assets/images/mochi_matcha.jpg',
     description:
         'Mochi matcha adalah kue Jepang yang terbuat dari tepung ketan, gula, dan matcha.',
     ingredients: [
