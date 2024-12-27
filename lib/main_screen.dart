@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_recipes/detail_screen.dart';
+import 'package:food_recipes/model/food_recipe.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  final List<FoodRecipe> foodRecipes = FoodRecipes;
+  MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +27,8 @@ class MainScreen extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.bottomRight,
                     colors: [
-                      Colors.black.withValues(alpha: .8),
-                      Colors.black.withValues(alpha: .2),
+                      Colors.black.withOpacity(.8),
+                      Colors.black.withOpacity(.2),
                     ],
                   ),
                 ),
@@ -77,7 +80,7 @@ class MainScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Best Food",
+                    "Makanan Utama",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800],
@@ -91,81 +94,32 @@ class MainScreen extends StatelessWidget {
                     height: 200,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: [
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: 'Ayam Penyet',
-                        ),
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: "Nasi Goreng",
-                        ),
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: 'Ayam Penyet',
-                        ),
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: "Nasi Goreng",
-                        ),
-                      ],
+                      children: foodRecipes
+                          .where((recipe) =>
+                              recipe.name.contains('Ayam') ||
+                              recipe.name.contains('Nasi') ||
+                              recipe.name.contains('Rendang'))
+                          .map((recipe) => makeItem(
+                                image: recipe.imageAsset,
+                                title: recipe.name,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailScreen(foodRecipe: recipe),
+                                    ),
+                                  );
+                                },
+                              ))
+                          .toList(),
                     ),
                   ),
                   SizedBox(
                     height: 30,
                   ),
-                  Container(
-                    height: 50,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        AspectRatio(
-                          aspectRatio: 1.5 / 1,
-                          child: Container(
-                            margin: EdgeInsets.only(right: 15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.blue.withValues(alpha: .2),
-                            ),
-                            child: Icon(
-                              Icons.hotel,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        AspectRatio(
-                          aspectRatio: 1.5 / 1,
-                          child: Container(
-                            margin: EdgeInsets.only(right: 15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            ),
-                            child: Icon(
-                              Icons.flight,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                        AspectRatio(
-                          aspectRatio: 1.5 / 1,
-                          child: Container(
-                            margin: EdgeInsets.only(right: 15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            ),
-                            child: Icon(Icons.event, color: Colors.green),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   Text(
-                    "Best Drinks",
+                    "Makanan Pendamping",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800],
@@ -179,24 +133,26 @@ class MainScreen extends StatelessWidget {
                     height: 200,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: [
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: 'Ayam Penyet',
-                        ),
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: "Nasi Goreng",
-                        ),
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: 'Ayam Penyet',
-                        ),
-                        makeItem(
-                          image: 'assets/images/chef2.jpg',
-                          title: "Nasi Goreng",
-                        ),
-                      ],
+                      children: foodRecipes
+                          .where((recipe) =>
+                              recipe.name.contains('Brownies') ||
+                              recipe.name.contains('Mochi') ||
+                              recipe.name.contains('Nastar') ||
+                              recipe.name.contains('Martabak'))
+                          .map((recipe) => makeItem(
+                                image: recipe.imageAsset,
+                                title: recipe.name,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailScreen(foodRecipe: recipe),
+                                    ),
+                                  );
+                                },
+                              ))
+                          .toList(),
                     ),
                   ),
                 ],
@@ -211,37 +167,43 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget makeItem({image, title}) {
+  Widget makeItem(
+      {required String image,
+      required String title,
+      required VoidCallback onTap}) {
     return AspectRatio(
       aspectRatio: 1 / 1,
-      child: Container(
-        margin: EdgeInsets.only(right: 15),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          image: DecorationImage(
-            image: AssetImage(image),
-            fit: BoxFit.cover,
-          ),
-        ),
+      child: GestureDetector(
+        onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.only(right: 15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.bottomRight,
-              colors: [
-                Colors.black.withValues(alpha: .8),
-                Colors.black.withValues(alpha: .2),
-              ],
+            image: DecorationImage(
+              image: AssetImage(image),
+              fit: BoxFit.cover,
             ),
           ),
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.bottomRight,
+                colors: [
+                  Colors.black.withOpacity(.8),
+                  Colors.black.withOpacity(.2),
+                ],
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
             ),
           ),

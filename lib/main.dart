@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_recipes/main_screen.dart';
-import 'package:food_recipes/welcome_page_screen.dart';
 
 void main() => runApp(const MyApp());
 
