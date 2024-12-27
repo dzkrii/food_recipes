@@ -1,16 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:food_recipes/model/food_recipe.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final FoodRecipe foodRecipe;
 
   DetailScreen({required this.foodRecipe});
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  bool _isBookmarked = false;
+
+  void _toggleBookmark() {
+    setState(() {
+      _isBookmarked = !_isBookmarked;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(foodRecipe.name),
+        title: Text(widget.foodRecipe.name),
+        actions: [
+          IconButton(
+            icon: Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                color: Colors.green),
+            onPressed: _toggleBookmark,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -20,7 +40,7 @@ class DetailScreen extends StatelessWidget {
               height: 300,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(foodRecipe.imageAsset),
+                  image: AssetImage(widget.foodRecipe.imageAsset),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -29,7 +49,7 @@ class DetailScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                foodRecipe.description,
+                widget.foodRecipe.description,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey[800],
@@ -53,7 +73,7 @@ class DetailScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: foodRecipe.ingredients
+                children: widget.foodRecipe.ingredients
                     .map((ingredient) => Text(
                           "- $ingredient",
                           style: TextStyle(
@@ -81,7 +101,7 @@ class DetailScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: foodRecipe.steps
+                children: widget.foodRecipe.steps
                     .asMap()
                     .entries
                     .map((entry) => Text(
